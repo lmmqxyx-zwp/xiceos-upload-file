@@ -14,6 +14,8 @@
 <script src="/plugins/jsencrypt-3.0.0-rc.1/jsencrypt.min.js"></script>
 <script>
     $(function () {
+
+        // 获取公钥的方法
         $('#getPublicKey').on('click', function () {
             $.ajax({
                 type: 'post',
@@ -28,6 +30,7 @@
             });
         });
 
+        // 使用公钥加密数据
         $('#encryptedDataOnJs').on('click', function () {
             var PUBLIC_KEY = '';
             $.ajax({
@@ -69,7 +72,7 @@
                     alert(e);
                 }
             });
-        })
+        });
     });
 
 </script>

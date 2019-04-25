@@ -29,8 +29,8 @@ public class RSAUtilTest {
     // 公钥加密
     @Test
     public void encryptedDataOnJava() {
-        String data = "hello world!";
-        String encrypted = RSAUtil.encryptedDataOnJava(data, PUBLIC_KEY);
+        String data = "0VCDx40xp5MP/kTg/zVyrX1FkgKOglb9";
+        String encrypted = RSAUtil.encryptedData(data, PUBLIC_KEY);
         System.out.println("加密前数据：" + data);
         System.out.println("加密后数据：" + encrypted);
     }
@@ -41,7 +41,7 @@ public class RSAUtilTest {
     // 私钥解密
     @Test
     public void decryptDataOnJava() {
-        String decrypt = RSAUtil.decryptDataOnJava(ENCRYPTED, PRIVATE_KEY);
+        String decrypt = RSAUtil.decryptData(ENCRYPTED, PRIVATE_KEY);
         System.out.println("解密后数据：" + decrypt);
     }
 

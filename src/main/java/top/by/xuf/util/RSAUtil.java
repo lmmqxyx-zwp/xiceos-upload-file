@@ -1,7 +1,6 @@
 package top.by.xuf.util;
 
 import java.io.ByteArrayOutputStream;
-
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -19,26 +18,31 @@ import java.util.Map;
 
 import javax.crypto.Cipher;
 
-
-/** */
 /**
- * <p>
- * RSA公钥/私钥/签名工具包
- * </p>
- * <p>
- * 罗纳德·李维斯特（Ron [R]ivest）、阿迪·萨莫尔（Adi [S]hamir）和伦纳德·阿德曼（Leonard [A]dleman）
- * </p>
+ * <p>Title: RSAUtil</p>
+ * <p>Description: RSA公钥/私钥/签名工具包</p>
  * <p>
  * 字符串格式的密钥在未在特殊说明情况下都为BASE64编码格式<br/>
  * 由于非对称加密速度极其缓慢，一般文件不使用它来加密而是使用对称加密，<br/>
  * 非对称加密算法可以用来对对称加密的密钥加密，这样保证密钥的安全也就保证了数据的安全
  * </p>
  *
- * @author IceWee
- * @date 2012-4-26
- * @version 1.0
+ * @author zwp
+ * @date 2019/4/25 9:26
  */
 public class RSAUtil {
+
+    /**
+     * 默认公钥
+     */
+    public static final String DEFAULT_PUBLIC_KEY  = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCY8UNjU6gVBqw5kRC5ryN/77kTQlBruel1FgFcA/MJTiIpXI+x24FeqfgtFBofP3vVWzMeZeO8eG57yksn7GkFy5V2tRHGNLe6ynAU67cmE5GCHqbeZEW1gY8v0N3sCP+hrSB93n2t06vcJtRAT2zifQNCsr7f4gmNVhufIA2QkQIDAQAB";
+
+    /**
+     * 默认私钥
+     */
+    public static final String DEFAULT_PRIVATE_KEY = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJjxQ2NTqBUGrDmRELmvI3/vuRNCUGu56XUWAVwD8wlOIilcj7HbgV6p+C0UGh8/e9VbMx5l47x4bnvKSyfsaQXLlXa1EcY0t7rKcBTrtyYTkYIept5kRbWBjy/Q3ewI/6GtIH3efa3Tq9wm1EBPbOJ9A0Kyvt/iCY1WG58gDZCRAgMBAAECgYBnBALe8WdCmlcBA2wflg80SlT/2ufuV7AfNG4/+00FVIKAF5+WLgLqr1PBkUuzBoCzihVZgUmvFfNdIDoVLxDhULnXzMkOqidLBxAy8xB57m5RhpWXUbAt3vOo7jOIT/0nOppl7c7wcKHGkXF9IJo5ddMC838ZINKP2P2YSGOWnQJBAOCCyWyA8BqWnpM32yJDTeJQ9veYAd09X3vcVHs8eyK/vAvNdN83Yiv78iWQubPyGkGj/P78G7ncvFuVjBTYt38CQQCuZMNu6uc29UQl2WyHkdI/pQXoWt+1rfS54AXNx07EblS8N9DXTPCr+LwzVbt/KkxzXieAinH+D+We/AaEbj/vAkBgzONODjX4MNMEhMPN/Rj6qJAjZv3+xzSBMhmW3Rf2fpb0u8xVZgrFDid0vPbkuFFL1goCYu8NbzgjgNJaNqq/AkB+36HrDQy/x/oXSzIRAz6hvO4qWAqPA4qau+edCNY+REJzWGwgZsJlaqWI92NcJarO9/3nH1HFU01rt9EKAaeTAkEArAL6jnCxB5rz9vdptCJnt1qLn9pN9V5R2tsA9Dm6jXM/hffsmLz+Ec2CRvqZ5QoU8ZtOqgu7hULMFcfoRoFnvw==";
+
+
     /**
      * 加密算法RSA
      */
@@ -54,7 +58,6 @@ public class RSAUtil {
      */
     private static final String PUBLIC_KEY = "RSAPublicKey";
 
-    /** */
     /**
      * 获取私钥的key
      */
@@ -72,9 +75,7 @@ public class RSAUtil {
     private static final int MAX_DECRYPT_BLOCK = 128;
 
     /**
-     * <p>
      * 生成密钥对(公钥和私钥)
-     * </p>
      *
      * @return
      * @throws Exception
@@ -93,22 +94,16 @@ public class RSAUtil {
         return keyMap;
     }
 
-    /** */
     /**
-     * <p>
      * 用私钥对信息生成数字签名
-     * </p>
      *
-     * @param data
-     *            已加密数据
-     * @param privateKey
-     *            私钥(BASE64编码)
+     * @param data       已加密数据
+     * @param privateKey 私钥(BASE64编码)
      *
      * @return
      * @throws Exception
      */
-    public static String sign(byte[] data, String privateKey)
-            throws Exception {
+    public static String sign(byte[] data, String privateKey) throws Exception {
         byte[] keyBytes = Base64Util.decode(privateKey);
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
@@ -120,25 +115,18 @@ public class RSAUtil {
         return Base64Util.encode(signature.sign());
     }
 
-    /** */
     /**
-     * <p>
      * 校验数字签名
-     * </p>
      *
-     * @param data
-     *            已加密数据
-     * @param publicKey
-     *            公钥(BASE64编码)
-     * @param sign
-     *            数字签名
+     * @param data      已加密数据
+     * @param publicKey 公钥(BASE64编码)
+     * @param sign      数字签名
      *
      * @return
      * @throws Exception
      *
      */
-    public static boolean verify(byte[] data, String publicKey, String sign)
-            throws Exception {
+    public static boolean verify(byte[] data, String publicKey, String sign) throws Exception {
         byte[] keyBytes = Base64Util.decode(publicKey);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
@@ -150,21 +138,15 @@ public class RSAUtil {
         return signature.verify(Base64Util.decode(sign));
     }
 
-    /** */
     /**
-     * <P>
      * 私钥解密
-     * </p>
      *
-     * @param encryptedData
-     *            已加密数据
-     * @param privateKey
-     *            私钥(BASE64编码)
+     * @param encryptedData 已加密数据
+     * @param privateKey    私钥(BASE64编码)
      * @return
      * @throws Exception
      */
-    public static byte[] decryptByPrivateKey(byte[] encryptedData,
-                                             String privateKey) throws Exception {
+    public static byte[] decryptByPrivateKey(byte[] encryptedData, String privateKey) throws Exception {
         byte[] keyBytes = Base64Util.decode(privateKey);
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
@@ -183,8 +165,7 @@ public class RSAUtil {
             if ((inputLen - offSet) > MAX_DECRYPT_BLOCK) {
                 cache = cipher.doFinal(encryptedData, offSet, MAX_DECRYPT_BLOCK);
             } else {
-                cache = cipher.doFinal(encryptedData, offSet, inputLen -
-                        offSet);
+                cache = cipher.doFinal(encryptedData, offSet, inputLen - offSet);
             }
 
             out.write(cache, 0, cache.length);
@@ -198,21 +179,15 @@ public class RSAUtil {
         return decryptedData;
     }
 
-    /** */
     /**
-     * <p>
      * 公钥解密
-     * </p>
      *
-     * @param encryptedData
-     *            已加密数据
-     * @param publicKey
-     *            公钥(BASE64编码)
+     * @param encryptedData 已加密数据
+     * @param publicKey     公钥(BASE64编码)
      * @return
      * @throws Exception
      */
-    public static byte[] decryptByPublicKey(byte[] encryptedData,
-                                            String publicKey) throws Exception {
+    public static byte[] decryptByPublicKey(byte[] encryptedData, String publicKey) throws Exception {
         byte[] keyBytes = Base64Util.decode(publicKey);
         X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
@@ -246,21 +221,15 @@ public class RSAUtil {
         return decryptedData;
     }
 
-    /** */
     /**
-     * <p>
      * 公钥加密
-     * </p>
      *
-     * @param data
-     *            源数据
-     * @param publicKey
-     *            公钥(BASE64编码)
+     * @param data      源数据
+     * @param publicKey 公钥(BASE64编码)
      * @return
      * @throws Exception
      */
-    public static byte[] encryptByPublicKey(byte[] data, String publicKey)
-            throws Exception {
+    public static byte[] encryptByPublicKey(byte[] data, String publicKey) throws Exception {
         byte[] keyBytes = Base64Util.decode(publicKey);
         X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
@@ -295,21 +264,15 @@ public class RSAUtil {
         return encryptedData;
     }
 
-    /** */
     /**
-     * <p>
      * 私钥加密
-     * </p>
      *
-     * @param data
-     *            源数据
-     * @param privateKey
-     *            私钥(BASE64编码)
+     * @param data       源数据
+     * @param privateKey 私钥(BASE64编码)
      * @return
      * @throws Exception
      */
-    public static byte[] encryptByPrivateKey(byte[] data, String privateKey)
-            throws Exception {
+    public static byte[] encryptByPrivateKey(byte[] data, String privateKey) throws Exception {
         byte[] keyBytes = Base64Util.decode(privateKey);
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
@@ -342,51 +305,40 @@ public class RSAUtil {
         return encryptedData;
     }
 
-    /** */
     /**
-     * <p>
      * 获取私钥
-     * </p>
      *
-     * @param keyMap
-     *            密钥对
+     * @param keyMap 密钥对
      * @return
      * @throws Exception
      */
-    public static String getPrivateKey(Map<String, Object> keyMap)
-            throws Exception {
+    public static String getPrivateKey(Map<String, Object> keyMap) throws Exception {
         Key key = (Key) keyMap.get(PRIVATE_KEY);
-
         return Base64Util.encode(key.getEncoded());
     }
 
-    /** */
     /**
-     * <p>
      * 获取公钥
-     * </p>
      *
-     * @param keyMap
-     *            密钥对
+     * @param keyMap 密钥对
      * @return
      * @throws Exception
      */
-    public static String getPublicKey(Map<String, Object> keyMap)
-            throws Exception {
+    public static String getPublicKey(Map<String, Object> keyMap) throws Exception {
         Key key = (Key) keyMap.get(PUBLIC_KEY);
-
         return Base64Util.encode(key.getEncoded());
     }
 
     /**
-     * java端公钥加密
+     * 后端公钥加密
+     * @param data      待加密数据
+     * @param PUBLICKEY 加密公钥
+     * @return
      */
-    public static String encryptedDataOnJava(String data, String PUBLICKEY) {
+    public static String encryptedData(String data, String PUBLICKEY) {
         try {
-            data = Base64Util.encode(encryptByPublicKey(data.getBytes(),
-                    PUBLICKEY));
+            data = Base64Util.encode(encryptByPublicKey(data.getBytes(), PUBLICKEY));
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -394,15 +346,18 @@ public class RSAUtil {
     }
 
     /**
-     * java端私钥解密
+     * 后端私钥解密
+     * @param data       加密数据
+     * @param PRIVATEKEY 解密私钥
+     * @return
      */
-    public static String decryptDataOnJava(String data, String PRIVATEKEY) {
+    public static String decryptData(String data, String PRIVATEKEY) {
         String temp = "";
 
         try {
             byte[] rs = Base64Util.decode(data);
-            temp = new String(RSAUtil.decryptByPrivateKey(rs, PRIVATEKEY),
-                    "UTF-8"); //以utf-8的方式生成字符串
+            // 以utf-8的方式生成字符串
+            temp = new String(RSAUtil.decryptByPrivateKey(rs, PRIVATEKEY), "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
         }

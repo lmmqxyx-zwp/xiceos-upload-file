@@ -36,7 +36,7 @@ public class RSAController {
     public Object decrypt(HttpServletRequest request) {
         String encrypted = request.getParameter("encrypted");
 
-        String decrypt = RSAUtil.decryptDataOnJava(encrypted, PRIVATE_KEY);
+        String decrypt = RSAUtil.decryptData(encrypted, PRIVATE_KEY);
 
         return JSON.toJSONString(decrypt);
 
