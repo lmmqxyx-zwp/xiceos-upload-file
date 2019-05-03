@@ -103,7 +103,7 @@ public class FileUploadController {
             }
         }
 
-        return null;
+        return index();
     }
 
 }
